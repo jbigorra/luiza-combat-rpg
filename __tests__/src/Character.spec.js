@@ -5,7 +5,7 @@
 
   1. All Characters, when created, have:
     - Health, starting at 1000
-    - Level, starting at 1 
+    - Level, starting at 1
     - May be Alive or Dead, starting Alive (Alive may be a true/false)
 
   2. Characters can Deal Damage to Characters.
@@ -17,8 +17,7 @@
     - Healing cannot raise health above 1000
  */
 
-
-function Character() {
+function Character () {
   this.health = 1000;
   this.level = 1;
   this.isAlive = true;
@@ -28,7 +27,7 @@ function Character() {
       character.health = 0;
       character.isAlive = false;
     }
-  }
+  };
   this.heal = function (character) {
     if (!character.isAlive) return;
 
@@ -37,12 +36,12 @@ function Character() {
     if (character.health > 1000) {
       character.health = 1000;
     }
-  }
+  };
 }
 
 describe('Character should', () => {
   it('be created with expected properties', () => {
-    // when 
+    // when
     const character = new Character();
 
     // then/expectation
@@ -52,7 +51,7 @@ describe('Character should', () => {
   });
 
   it('damage another character', () => {
-    //given
+    // given
     const character1 = new Character();
     const character2 = new Character();
     // when
@@ -60,7 +59,7 @@ describe('Character should', () => {
     character1.attack(character2, 10);
 
     // if the damage didn't exceed the character.health
-    //then/expectation
+    // then/expectation
     expect(character2.health).toBe(990);
     expect(character2.isAlive).toBe(true);
   });
@@ -71,7 +70,7 @@ describe('Character should', () => {
     const character2 = new Character();
     // when
     character1.attack(character2, 1000);
-    //damage>health
+    // damage>health
     // then/expectation
     expect(character2.health).toBe(0);
     expect(character2.isAlive).toBe(false);

@@ -2,7 +2,7 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jest/globals": true
+    "jest": true
   },
   "extends": [
     "standard",
@@ -21,8 +21,19 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "jest"],
+  "plugins": [
+    "react",
+    "jest"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
-    "semi": ["error", "always"]
+    "semi": [
+      "error",
+      "always"
+    ]
   }
 }
