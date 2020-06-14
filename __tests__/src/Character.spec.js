@@ -1,30 +1,15 @@
 /* eslint-env jest */
 
 /**
-## Iteration One ##
+## Iteration Three ##
 
-  1. All Characters, when created, have:
-    - Health, starting at 1000
-    - Level, starting at 1
-    - May be Alive or Dead, starting Alive (Alive may be a true/false)
+1. Characters have an attack Max Range.
 
-  2. Characters can Deal Damage to Characters.
-    - Damage is subtracted from Health
-    - When damage received exceeds current Health, Health becomes 0 and the character dies
+1. *Melee* fighters have a range of 2 meters.
 
-  3. A Character can Heal a Character.
-    - Dead characters cannot be healed
-    - Healing cannot raise health above 1000
+1. *Ranged* fighters have a range of 20 meters.
 
-    ## Iteration Two ##
-
-    1. A Character cannot Deal Damage to itself.
-
-    1. A Character can only Heal itself.
-
-    1. When dealing damage:
-        - If the target is 5 or more Levels above the attacker, Damage is reduced by 50%
-        - If the target is 5 or more levels below the attacker, Damage is increased by 50%
+1. Characters must be in range to deal damage to a target.
  */
 
 /**
@@ -33,15 +18,33 @@
  * from the Character object.
  */
 
-function Character () {
+// const CharacterType = {
+//   melee: 'melee',
+//   ranged: 'ranged'
+// };
+
+function Character (type = 'melee') {
   this.health = 1000;
   this.level = 1;
+
+  // privates
 
   const isEqualTo = (character) => this === character;
 
   const targetIs5orMoreLevelsAbove = (target) => (target.level - this.level) >= 5;
 
   const targetIs5orMoreLevelsBelow = (target) => (this.level - target.level) >= 5;
+
+  // Publics
+
+  this.MAX_RANGE = function () {
+    if (type === 'melee') {
+      return 2;
+    };
+    if (type === 'ranged') {
+      return 20;
+    };
+  };
 
   this.isAlive = function () {
     return this.health > 0;
@@ -224,5 +227,33 @@ describe('Character should', () => {
     character2.attack(character1, 50);
 
     expect(character1.health).toBe(925);
+  });
+
+  /**
+## Iteration Three ##
+
+1. Characters have an attack Max Range.
+  - probably we need to create a property called MAX_RANGE, is of type number.
+
+2. *Melee* fighters have a range of 2 meters.
+    - The character object can be created as a Melee, hence it has MAX_RANGE=2
+  *Ranged* fighters have a range of 20 meters.
+    - The character object can be created as a Ranged, hence it has MAX_RANGE=20
+
+3. Characters must be in range to deal damage to a target.
+ */
+
+  it('have a Max Range set to 2 if character is melee', () => {
+    // given/when
+    const Melee = new Character('melee');
+
+    expect(Melee.MAX_RANGE()).toBe(2);
+  });
+
+  it('have a Max Range set to 20 if character is Ranged', () => {
+    // given/when
+    const Ranged = new Character('ranged');
+
+    expect(Ranged.MAX_RANGE()).toBe(20);
   });
 });
