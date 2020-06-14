@@ -15,6 +15,16 @@
   3. A Character can Heal a Character.
     - Dead characters cannot be healed
     - Healing cannot raise health above 1000
+
+    ## Iteration Two ##
+
+    1. A Character cannot Deal Damage to itself.
+
+    1. A Character can only Heal itself.
+
+    1. When dealing damage:
+        - If the target is 5 or more Levels above the attacker, Damage is reduced by 50%
+        - If the target is 5 or more levels below the attacker, Damage is increased by 50%
  */
 
 function Character () {
@@ -112,5 +122,17 @@ describe('Character should', () => {
 
     expect(character2.health).toBe(0);
     expect(character2.isAlive).toBe(false);
+  });
+
+  //   A Character cannot Deal Damage to itself.
+
+  it('not deal damage to itself', () => {
+    const character1 = new Character();
+    const initialHealth = character1.health;
+
+    character1.attack(character1, 1500);
+
+    expect(character1.health).toBe(initialHealth);
+    expect(character.isAlive).toBe(true);
   });
 });
