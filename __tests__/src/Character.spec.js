@@ -256,4 +256,27 @@ describe('Character should', () => {
 
     expect(Ranged.MAX_RANGE()).toBe(20);
   });
+
+  /**
+   * one test to check if ranged character can attack
+   * one test to check if melee character can attack
+   *
+   * - Before attacking characters should have a position.
+   * - calculate position difference between two characters
+   * - before atackking check who is attacking to check the correct rule
+   *    - ranged: 0 - 20
+   *    - melee: 0 - 2
+   */
+
+  it('be in range to deal damage to the target', () => {
+    // given/when
+    // position of the target and the character
+    // melee attack, range within 0<2
+    //
+
+    // melee range 0 <=2
+    expect().toBe();
+    // ranged range 0 <=20
+    expect().toBe();
+  });
 });
