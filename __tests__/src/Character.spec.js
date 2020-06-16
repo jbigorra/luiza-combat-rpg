@@ -34,6 +34,7 @@ function Character (type = 'melee') {
   const targetIs5orMoreLevelsAbove = (target) => (target.level - this.level) >= 5;
 
   const targetIs5orMoreLevelsBelow = (target) => (this.level - target.level) >= 5;
+  const distanceWithCharacter = (target) => Math.abs(this.position - target.position);
 
   // Publics
 
@@ -46,15 +47,33 @@ function Character (type = 'melee') {
     };
   };
 
+  this.position = function () {
+    if (type === 'melee') {
+      return 1;
+    };
+    if (type === 'ranged') {
+      return 22;
+    };
+
+  };
+
+
+
+
   this.isAlive = function () {
     return this.health > 0;
   };
 
   this.attack = function (character, damage) {
     if (isEqualTo(character)) return;
+    if (distanceWithCharacter(character) < 20) return;
 
     if (targetIs5orMoreLevelsAbove(character)) damage = damage / 2;
     if (targetIs5orMoreLevelsBelow(character)) damage = damage * 1.5;
+    // if melee is attacking and the difference between its and ranged is above 2m, then return; if below or equal, deal damage
+    
+    
+    // if ranged character is attacking and the difference between its and melee is above 20, then return; if below or equal, deal damage
     character.health -= damage;
 
     if (character.health <= 0) {
@@ -258,8 +277,9 @@ describe('Character should', () => {
   });
 
   /**
-   * one test to check if ranged character can attack
    * one test to check if melee character can attack
+   * one test to check if ranged character can attack
+  
    *
    * - Before attacking characters should have a position.
    * - calculate position difference between two characters
@@ -270,13 +290,20 @@ describe('Character should', () => {
 
   it('be in range to deal damage to the target', () => {
     // given/when
+    const Melee = new Character('melee');
+    const Ranged = new Character('ranged');
+    const initialHealth = Melee.health;
+    const position = Melee.position;
+
+    Melee.position = 21;
+
+    Ranged.attack(Melee, 50);
     // position of the target and the character
     // melee attack, range within 0<2
     //
 
     // melee range 0 <=2
-    expect().toBe();
+    expect(Melee.health).toBe(initialHealth);
     // ranged range 0 <=20
-    expect().toBe();
   });
 });
