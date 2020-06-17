@@ -57,8 +57,13 @@ function Character (type = 'melee') {
 
   };
 
+  this.isMelee = function () {
+    return this.position;
+  }
 
-
+  this.isRangee = function () {
+    return this.position;
+  }
 
   this.isAlive = function () {
     return this.health > 0;
@@ -66,14 +71,18 @@ function Character (type = 'melee') {
 
   this.attack = function (character, damage) {
     if (isEqualTo(character)) return;
-    if (distanceWithCharacter(character) < 20) return;
+    //if (distanceWithCharacter(character) < 20) return;
+    // const distanceWithCharacter = distanceWithCharacter(character);
 
     if (targetIs5orMoreLevelsAbove(character)) damage = damage / 2;
     if (targetIs5orMoreLevelsBelow(character)) damage = damage * 1.5;
-    // if melee is attacking and the difference between its and ranged is above 2m, then return; if below or equal, deal damage
     
-    
-    // if ranged character is attacking and the difference between its and melee is above 20, then return; if below or equal, deal damage
+    if (isMelee(this) && isRangee(target)) {
+      if (this.position > 2) damage
+  } else if (isRangee(this) && isMelee(target)){
+      if (this.position > 20);
+  };
+  
     character.health -= damage;
 
     if (character.health <= 0) {
