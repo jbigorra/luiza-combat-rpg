@@ -23,9 +23,10 @@
 //   ranged: 'ranged'
 // };
 
-function Character (type = 'melee') {
+function Character (type = 'melee', position) {
   this.health = 1000;
   this.level = 1;
+  this.position = position;
 
   // privates
 
@@ -34,7 +35,7 @@ function Character (type = 'melee') {
   const targetIs5orMoreLevelsAbove = (target) => (target.level - this.level) >= 5;
 
   const targetIs5orMoreLevelsBelow = (target) => (this.level - target.level) >= 5;
-  const distanceWithCharacter = (target) => Math.abs(this.position - target.position);
+  // const distanceWithCharacter = (target) => Math.abs(this.position - target.position);
 
   // Publics
 
@@ -47,23 +48,7 @@ function Character (type = 'melee') {
     };
   };
 
-  this.position = function () {
-    if (type === 'melee') {
-      return 1;
-    };
-    if (type === 'ranged') {
-      return 22;
-    };
 
-  };
-
-  this.isMelee = function () {
-    return this.position;
-  }
-
-  this.isRangee = function () {
-    return this.position;
-  }
 
   this.isAlive = function () {
     return this.health > 0;
@@ -77,11 +62,11 @@ function Character (type = 'melee') {
     if (targetIs5orMoreLevelsAbove(character)) damage = damage / 2;
     if (targetIs5orMoreLevelsBelow(character)) damage = damage * 1.5;
     
-    if (isMelee(this) && isRangee(target)) {
-      if (this.position > 2) damage
-  } else if (isRangee(this) && isMelee(target)){
-      if (this.position > 20);
-  };
+  //   if (isMelee(this) && isRangee(target)) {
+  //     if (this.position > 2) damage
+  // } else if (isRangee(this) && isMelee(target)){
+  //     if (this.position > 20);
+  // };
   
     character.health -= damage;
 
@@ -299,20 +284,16 @@ describe('Character should', () => {
 
   it('be in range to deal damage to the target', () => {
     // given/when
-    const Melee = new Character('melee');
-    const Ranged = new Character('ranged');
-    const initialHealth = Melee.health;
-    const position = Melee.position;
-
-    Melee.position = 21;
-
-    Ranged.attack(Melee, 50);
-    // position of the target and the character
+    const Melee = new Character('melee', 5);
+    const Ranged = new Character('ranged', 3);
+    const positionDifference = Melee.position - Ranged.position;
     // melee attack, range within 0<2
-    //
 
     // melee range 0 <=2
-    expect(Melee.health).toBe(initialHealth);
+    expect(Melee.position).toBe(5);
+    expect(Ranged.position).toBe(3);
+    expect(positionDifference).toBe(2);
+    //expect(Melee.health).toBe(initialHealth);
     // ranged range 0 <=20
   });
 });
