@@ -23,9 +23,10 @@
 //   ranged: 'ranged'
 // };
 
-function Character (type = 'melee', position) {
+function Character (type, position) {
   this.health = 1000;
   this.level = 1;
+  this.type = type;
   this.position = position;
 
   // privates
