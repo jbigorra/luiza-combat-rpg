@@ -38,6 +38,8 @@ function Character (type, position) {
   const targetIs5orMoreLevelsBelow = (target) => (this.level - target.level) >= 5;
   // const distanceWithCharacter = (target) => Math.abs(this.position - target.position);
 
+  const positionDifference = (target) => Math.abs(this.position - target.position);
+
   // Publics
 
   this.MAX_RANGE = function () {
@@ -57,6 +59,8 @@ function Character (type, position) {
 
   this.attack = function (character, damage) {
     if (isEqualTo(character)) return;
+
+    if (positionDifference(character) > 20) return;
     //if (distanceWithCharacter(character) < 20) return;
     // const distanceWithCharacter = distanceWithCharacter(character);
 
@@ -125,11 +129,6 @@ describe('Character should', () => {
     expect(character2.isAlive()).toBe(false);
   });
 
-  /**
-   * A Character can Heal a Character.
-    - Dead characters cannot be healed
-    - Healing cannot raise health above 1000
-   */
 
   it('not heal another character', () => {
     const character1 = new Character();
@@ -287,13 +286,18 @@ describe('Character should', () => {
     // given/when
     const Melee = new Character('melee', 1);
     const Ranged = new Character('ranged', 3);
-    const positionDifference = Math.abs(Melee.position - Ranged.position);
+    // const positionDifference = Math.abs(Melee.position - Ranged.position);
     // melee attack, range within 0<2
+    Melee.attack(Ranged, 50);
+
 
     // melee range 0 <=2
     expect(Melee.position).toBe(1);
-    expect(Ranged.position).toBe(3);
-    expect(positionDifference).toBe(2);
+    expect(Ranged.position).toBe(3);    
+    expect(Ranged.health).toBe(1000);
+
+
+    //expect(positionDifference).toBe(2);
     //expect(Melee.health).toBe(initialHealth);
     // ranged range 0 <=20
   });
