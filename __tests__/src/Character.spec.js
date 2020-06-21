@@ -285,13 +285,13 @@ describe('Character should', () => {
 
   it('be in range to deal damage to the target', () => {
     // given/when
-    const Melee = new Character('melee', 5);
+    const Melee = new Character('melee', 1);
     const Ranged = new Character('ranged', 3);
-    const positionDifference = Melee.position - Ranged.position;
+    const positionDifference = Math.abs(Melee.position - Ranged.position);
     // melee attack, range within 0<2
 
     // melee range 0 <=2
-    expect(Melee.position).toBe(5);
+    expect(Melee.position).toBe(1);
     expect(Ranged.position).toBe(3);
     expect(positionDifference).toBe(2);
     //expect(Melee.health).toBe(initialHealth);
