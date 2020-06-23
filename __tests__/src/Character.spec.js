@@ -60,9 +60,7 @@ function Character (type, position) {
   this.attack = function (character, damage) {
     if (isEqualTo(character)) return;
 
-    if (positionDifference(character) > 20) return;
-    //if (distanceWithCharacter(character) < 20) return;
-    // const distanceWithCharacter = distanceWithCharacter(character);
+    if (positionDifference > 20) return;
 
     if (targetIs5orMoreLevelsAbove(character)) damage = damage / 2;
     if (targetIs5orMoreLevelsBelow(character)) damage = damage * 1.5;
@@ -284,20 +282,19 @@ describe('Character should', () => {
 
   it('be in range to deal damage to the target', () => {
     // given/when
-    const Melee = new Character('melee', 1);
+    const Melee = new Character('melee', 26);
     const Ranged = new Character('ranged', 3);
-    // const positionDifference = Math.abs(Melee.position - Ranged.position);
-    // melee attack, range within 0<2
+    const positionDifference = Math.abs(Melee.position - Ranged.position);
+
     Melee.attack(Ranged, 50);
+    Ranged.attack(Melee, 70);
 
-
-    // melee range 0 <=2
-    expect(Melee.position).toBe(1);
+    expect(Melee.position).toBe(26);
     expect(Ranged.position).toBe(3);    
-    expect(Ranged.health).toBe(1000);
+    // expect(Ranged.health).toBe(1000);
+    //expect(Melee.health).toBe(1000);
 
-
-    //expect(positionDifference).toBe(2);
+    expect(positionDifference).toBe(23);
     //expect(Melee.health).toBe(initialHealth);
     // ranged range 0 <=20
   });
