@@ -36,45 +36,36 @@ function Character (type, position) {
   const targetIs5orMoreLevelsAbove = (target) => (target.level - this.level) >= 5;
 
   const targetIs5orMoreLevelsBelow = (target) => (this.level - target.level) >= 5;
-  // const distanceWithCharacter = (target) => Math.abs(this.position - target.position);
 
-  const positionDifference = (target) => Math.abs(this.position - target.position);
+  const IsNotInRange = (targetCharacter) => Math.abs(this.position - targetCharacter.position) > this.MAX_RANGE();
 
   // Publics
 
-  this.MAX_RANGE = function () {
-    if (type === 'melee') {
+  this.MAX_RANGE = () => {
+    if (this.type === 'melee') {
       return 2;
     };
-    if (type === 'ranged') {
+    if (this.type === 'ranged') {
       return 20;
     };
   };
-
-
 
   this.isAlive = function () {
     return this.health > 0;
   };
 
-  this.attack = function (character, damage) {
-    if (isEqualTo(character)) return;
+  this.attack = function (targetCharacter, damage) {
+    if (isEqualTo(targetCharacter)) return;
+    if (this.type === 'melee' && IsNotInRange(targetCharacter)) return;
+    if (this.type === 'ranged' && IsNotInRange(targetCharacter)) return;
 
-    if (positionDifference > 20) return;
+    if (targetIs5orMoreLevelsAbove(targetCharacter)) damage = damage / 2;
+    if (targetIs5orMoreLevelsBelow(targetCharacter)) damage = damage * 1.5;
 
-    if (targetIs5orMoreLevelsAbove(character)) damage = damage / 2;
-    if (targetIs5orMoreLevelsBelow(character)) damage = damage * 1.5;
-    
-  //   if (isMelee(this) && isRangee(target)) {
-  //     if (this.position > 2) damage
-  // } else if (isRangee(this) && isMelee(target)){
-  //     if (this.position > 20);
-  // };
-  
-    character.health -= damage;
+    targetCharacter.health -= damage;
 
-    if (character.health <= 0) {
-      character.health = 0;
+    if (targetCharacter.health <= 0) {
+      targetCharacter.health = 0;
     }
   };
 
@@ -126,7 +117,6 @@ describe('Character should', () => {
     expect(character2.health).toBe(0);
     expect(character2.isAlive()).toBe(false);
   });
-
 
   it('not heal another character', () => {
     const character1 = new Character();
@@ -240,20 +230,6 @@ describe('Character should', () => {
     expect(character1.health).toBe(925);
   });
 
-  /**
-## Iteration Three ##
-
-1. Characters have an attack Max Range.
-  - probably we need to create a property called MAX_RANGE, is of type number.
-
-2. *Melee* fighters have a range of 2 meters.
-    - The character object can be created as a Melee, hence it has MAX_RANGE=2
-  *Ranged* fighters have a range of 20 meters.
-    - The character object can be created as a Ranged, hence it has MAX_RANGE=20
-
-3. Characters must be in range to deal damage to a target.
- */
-
   it('have a Max Range set to 2 if character is melee', () => {
     // given/when
     const Melee = new Character('melee');
@@ -268,34 +244,43 @@ describe('Character should', () => {
     expect(Ranged.MAX_RANGE()).toBe(20);
   });
 
-  /**
-   * one test to check if melee character can attack
-   * one test to check if ranged character can attack
-  
-   *
-   * - Before attacking characters should have a position.
-   * - calculate position difference between two characters
-   * - before atackking check who is attacking to check the correct rule
-   *    - ranged: 0 - 20
-   *    - melee: 0 - 2
-   */
-
-  it('be in range to deal damage to the target', () => {
+  it('(melee) not attack if it is out of range from the target', () => {
     // given/when
     const Melee = new Character('melee', 26);
     const Ranged = new Character('ranged', 3);
-    const positionDifference = Math.abs(Melee.position - Ranged.position);
+    const initialHealth = Ranged.health;
 
     Melee.attack(Ranged, 50);
-    Ranged.attack(Melee, 70);
 
-    expect(Melee.position).toBe(26);
-    expect(Ranged.position).toBe(3);    
-    // expect(Ranged.health).toBe(1000);
-    //expect(Melee.health).toBe(1000);
+    expect(Ranged.health).toBe(initialHealth);
+  });
 
-    expect(positionDifference).toBe(23);
-    //expect(Melee.health).toBe(initialHealth);
-    // ranged range 0 <=20
+  it('(melee) attack if it is in range from the target', () => {
+    // given/when
+    const Melee = new Character('melee', 1);
+    const Ranged = new Character('ranged', 3);
+
+    Melee.attack(Ranged, 50);
+
+    expect(Ranged.health).toBe(950);
+  });
+
+  it('(ranged) not attack if it is out of range from the target', () => {
+    const Ranged = new Character('ranged', 4);
+    const Melee = new Character('melee', 30);
+    const initialHealth = Melee.health;
+
+    Ranged.attack(Melee, 50);
+
+    expect(Melee.health).toBe(initialHealth);
+  });
+
+  it('(ranged) attack if it is in range from the target', () => {
+    const Ranged = new Character('ranged', 4);
+    const Melee = new Character('melee', 20);
+
+    Ranged.attack(Melee, 50);
+
+    expect(Melee.health).toBe(950);
   });
 });
