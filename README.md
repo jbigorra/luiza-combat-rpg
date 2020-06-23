@@ -57,14 +57,13 @@ This is a fun kata that has the programmer building simple combat rules, as for 
 
 1. Characters may belong to one or more Factions.
     - Newly created Characters belong to no Faction.
+    - A Character may Join or Leave one or more Factions.
 
-1. A Character may Join or Leave one or more Factions.
+2. Players belonging to the same Faction are considered Allies.
 
-1. Players belonging to the same Faction are considered Allies.
+3. Allies cannot Deal Damage to one another.
 
-1. Allies cannot Deal Damage to one another.
-
-1. Allies can Heal one another.
+4. Allies can Heal one another.
 
 ## Iteration Five ##
 
