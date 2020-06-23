@@ -1,4 +1,4 @@
-const { Character } = require('../src/core/entities/Character');
+import { Character } from '../../src/core/entities/Character';
 
 /**
 ## Iteration Three ##
