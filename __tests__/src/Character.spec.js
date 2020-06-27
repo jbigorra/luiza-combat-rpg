@@ -1,18 +1,6 @@
 import { Character } from '../../src/core/entities/Character';
 
 /**
-## Iteration Three ##
-
-1. Characters have an attack Max Range.
-
-1. *Melee* fighters have a range of 2 meters.
-
-1. *Ranged* fighters have a range of 20 meters.
-
-1. Characters must be in range to deal damage to a target.
- */
-
-/**
  * By creating internal annonymous functions inside the Character object we can effectively
  * create some sort of "private" method by means of closures. And avoid exposing internal behaviours
  * from the Character object.
@@ -225,4 +213,23 @@ describe('Character should', () => {
 
     expect(Melee.health).toBe(950);
   });
+ // 1. Characters may belong to one or more Factions.
+  //     - Newly created Characters belong to no Faction.
+  //     - A Character may Join or Leave one or more Factions.
+  it('join one faction', () => {
+    const Ranged = new Character('ranged');
+    const faction = ['Leaf', 'rain', 'cloud'];
+    //when character is joining
+    Ranged.joinFaction();
+
+    expect(Ranged.faction).toBe('Leaf');
+  });
+
 });
+// ## Iteration Four ##
+
+// 2. Players belonging to the same Faction are considered Allies.
+
+// 3. Allies cannot Deal Damage to one another.
+
+// 4. Allies can Heal one another.

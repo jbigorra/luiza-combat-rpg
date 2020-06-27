@@ -3,6 +3,7 @@ export function Character (type, position) {
   this.level = 1;
   this.type = type;
   this.position = position;
+  this.faction = '';
 
   // privates
 
@@ -54,4 +55,9 @@ export function Character (type, position) {
       targetCharacter.health = 1000;
     }
   };
+
+  this.joinFaction = function(character){
+    const factions = 'Leaf';
+   this.faction += factions;
+  }
 }
