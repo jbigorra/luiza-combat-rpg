@@ -53,14 +53,13 @@ rightButton.addEventListener('click', function () {
 //   console.log(meleeCharacter);
 // });
 
-//why it is attacking itself xd
+// why it is attacking itself xd
 attackButton.addEventListener('click', function () {
   myRangedCharacter.attack(selectedCharacter, 100);
   if (myRangedCharacter === selectedCharacter) return;
-  console.log(`${myRangedCharacter}is attacking`);
+  console.log(`${myRangedCharacter} is attacking`);
   console.log(selectedCharacter);
 });
-
 
 healButton.addEventListener('click', function () {
   console.log('healing');

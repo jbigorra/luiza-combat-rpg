@@ -20,6 +20,7 @@ describe('Character should', () => {
     expect(character.health).toBe(1000);
     expect(character.level).toBe(1);
     expect(character.isAlive()).toBe(true);
+    expect(character.guilds().length).toBe(0);
   });
 
   it('damage another character', () => {
@@ -213,23 +214,59 @@ describe('Character should', () => {
 
     expect(Melee.health).toBe(950);
   });
- // 1. Characters may belong to one or more Factions.
-  //     - Newly created Characters belong to no Faction.
-  //     - A Character may Join or Leave one or more Factions.
-  it('join one faction', () => {
-    const Ranged = new Character('ranged');
-   // const faction = ['Leaf', 'rain', 'cloud'];
-    //when character is joining
-    Ranged.joinFaction();
 
-    expect(Ranged.faction).toBe('Leaf');
+  it('join one guild', () => {
+    const Ranged = new Character('ranged');
+    // const faction = ['Leaf', 'rain', 'cloud'];
+    // when character is joining
+    Ranged.joinGuild('Leaf');
+
+    expect(Ranged.belongsToGuild('Leaf')).toBe(true);
   });
 
+  it('join two guilds', () => {
+    const Ranged = new Character('ranged');
+
+    Ranged.joinGuild('Leaf');
+    Ranged.joinGuild('Rain');
+
+    expect(Ranged.belongsToGuild('Leaf')).toBe(true);
+    expect(Ranged.belongsToGuild('Rain')).toBe(true);
+  });
+
+  it('leave one guild', () => {
+    const Ranged = new Character('ranged');
+    Ranged.joinGuild('Leaf');
+    Ranged.joinGuild('Rain');
+
+    Ranged.leaveGuild('Leaf');
+
+    expect(Ranged.belongsToGuild('Leaf')).toBe(false);
+    expect(Ranged.guilds().length).toBe(1);
+  });
+
+  it('characters belonging to the same guild are allies', () => {
+    const Ranged = new Character('ranged');
+    const Melee = new Character('melee');
+    Ranged.joinGuild('Leaf');
+    Ranged.joinGuild('Rain');
+    Ranged.joinGuild('Fog');
+
+    Melee.joinGuild('Leaf');
+
+    const value = Ranged.isAnAlly(Melee);
+
+    expect(value).toBe(true);
+  });
 });
+
 // ## Iteration Four ##
 
-// 2. Players belonging to the same Faction are considered Allies.
+// 1. Characters may belong to one or more guilds.
+//     - Newly created Characters belong to no guild. done
+//     - A Character may Join or Leave one or more guilds. half way
 
-// 3. Allies cannot Deal Damage to one another.
-
-// 4. Allies can Heal one another.
+// 2. Players belonging to the same guild are considered Allies.
+//    - Check characters are NOT allies
+//    - Allies cannot Deal Damage to one another.
+//    - Allies can Heal one another.

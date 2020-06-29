@@ -3,7 +3,7 @@ export function Character (type, position) {
   this.level = 1;
   this.type = type;
   this.position = position;
-  this.faction = '';
+  const _guilds = [];
 
   // privates
 
@@ -56,8 +56,40 @@ export function Character (type, position) {
     }
   };
 
-  this.joinFaction = function(){
-    const factions = 'Leaf';
-   this.faction += factions;
-  }
+  this.joinGuild = function (guild) {
+    _guilds.push(guild);
+  };
+
+  this.belongsToGuild = function (guild) {
+    return _guilds.indexOf(guild) >= 0;
+    // return 0 >= 0;
+    // return -1 >= 0;
+
+    // Long way of doing it.
+    // if (guilds.indexOf(guild) >= 0) {
+    //   return true;
+    // }
+
+    // return false;
+  };
+
+  this.guilds = function () {
+    return _guilds;
+  };
+
+  this.leaveGuild = function (guild) {
+    const guildIndex = _guilds.indexOf(guild);
+    return _guilds.splice(guildIndex, 1);
+  };
+
+  this.isAnAlly = function (character) {
+    for (let i = 0; i < _guilds.length; i++) {
+      const guild = _guilds[i];
+      if (character.belongsToGuild(guild)) {
+        return true;
+      };
+    }
+  };
 }
+
+// ['leaf', 'rain', 'fog'] ----- ['rain']
