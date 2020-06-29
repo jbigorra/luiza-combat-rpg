@@ -47,11 +47,20 @@ rightButton.addEventListener('click', function () {
   console.log('moving right');
 });
 
+// attackButton.addEventListener('click', function () {
+//   rangedCharacter.attack(meleeCharacter, 50);
+//   console.log('attacking');
+//   console.log(meleeCharacter);
+// });
+
+//why it is attacking itself xd
 attackButton.addEventListener('click', function () {
-  rangedCharacter.attack(meleeCharacter, 50);
-  console.log('attacking');
-  console.log(meleeCharacter);
+  myRangedCharacter.attack(selectedCharacter, 100);
+  if (myRangedCharacter === selectedCharacter) return;
+  console.log(`${myRangedCharacter}is attacking`);
+  console.log(selectedCharacter);
 });
+
 
 healButton.addEventListener('click', function () {
   console.log('healing');
