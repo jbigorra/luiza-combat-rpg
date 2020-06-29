@@ -56,7 +56,7 @@ export function Character (type, position) {
     }
   };
 
-  this.joinFaction = function(character){
+  this.joinFaction = function(){
     const factions = 'Leaf';
    this.faction += factions;
   }

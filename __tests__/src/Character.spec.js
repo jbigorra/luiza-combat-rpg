@@ -218,7 +218,7 @@ describe('Character should', () => {
   //     - A Character may Join or Leave one or more Factions.
   it('join one faction', () => {
     const Ranged = new Character('ranged');
-    const faction = ['Leaf', 'rain', 'cloud'];
+   // const faction = ['Leaf', 'rain', 'cloud'];
     //when character is joining
     Ranged.joinFaction();
 
