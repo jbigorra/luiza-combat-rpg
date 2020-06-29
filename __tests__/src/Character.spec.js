@@ -258,6 +258,21 @@ describe('Character should', () => {
 
     expect(value).toBe(true);
   });
+
+  it('characters dont belong to the same guild', () => {
+    const Ranged = new Character('ranged');
+    const Melee = new Character('melee');
+    Ranged.joinGuild('Leaf');
+    Ranged.joinGuild('Mist');
+    Ranged.joinGuild('Sand');
+
+    Melee.joinGuild('Rain');
+
+    const value = Ranged.isAnAlly(Melee);
+
+
+    expect(value).toBe(false);
+  });
 });
 
 // ## Iteration Four ##

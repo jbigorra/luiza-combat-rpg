@@ -87,7 +87,8 @@ export function Character (type, position) {
       const guild = _guilds[i];
       if (character.belongsToGuild(guild)) {
         return true;
-      };
+      }; 
+      return false;
     }
   };
 }
