@@ -279,12 +279,29 @@ describe('Character should', () => {
     const Melee = new Character('melee');
     Ranged.joinGuild('Leaf');
     Melee.joinGuild('Leaf');
+    Melee.joinGuild('Rain');
 
     const value = Ranged.isAnAlly(Melee);
     Ranged.attack(Melee, 50); 
 
     expect(value).toBe(true);
     expect(Melee.health).toBe(1000);
+  });
+
+  it('allies can heal one another', () => {
+    const Ranged = new Character('ranged');
+    const Melee = new Character('melee');
+    const Outsider = new Character('outsider');
+    Ranged.joinGuild('Leaf');
+    Melee.joinGuild('Leaf');
+    const value = Ranged.isAnAlly(Melee);
+
+    Outsider.attack(Melee, 100);
+    Ranged.heal(Melee, 50);
+
+    expect(value).toBe(true);
+   //after the attack: expect(Melee.health).toBe(950);
+    expect(Melee.health).toBe(950);
   });
 });
 

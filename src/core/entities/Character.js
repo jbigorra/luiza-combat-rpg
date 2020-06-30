@@ -48,7 +48,9 @@ export function Character (type, position) {
 
   this.heal = function (targetCharacter) {
     if (!targetCharacter.isAlive()) return;
-    if (!isEqualTo(targetCharacter)) return;
+   // if (!isEqualTo(targetCharacter)) return;
+    if (!this.isAnAlly(targetCharacter)) return;
+    // if it's not an ally or it is not itself
 
     targetCharacter.health += 50;
 
