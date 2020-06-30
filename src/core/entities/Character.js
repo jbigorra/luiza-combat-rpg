@@ -32,6 +32,7 @@ export function Character (type, position) {
 
   this.attack = function (targetCharacter, damage) {
     if (isEqualTo(targetCharacter)) return;
+    if (this.isAnAlly(targetCharacter) === true) return;
     if (this.type === 'melee' && IsNotInRange(targetCharacter)) return;
     if (this.type === 'ranged' && IsNotInRange(targetCharacter)) return;
 

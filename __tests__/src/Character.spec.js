@@ -273,6 +273,19 @@ describe('Character should', () => {
 
     expect(value).toBe(false);
   });
+
+  it('allies cannot deal damage to each other', () => {
+    const Ranged = new Character('ranged');
+    const Melee = new Character('melee');
+    Ranged.joinGuild('Leaf');
+    Melee.joinGuild('Leaf');
+
+    const value = Ranged.isAnAlly(Melee);
+    Ranged.attack(Melee, 50); 
+
+    expect(value).toBe(true);
+    expect(Melee.health).toBe(1000);
+  });
 });
 
 // ## Iteration Four ##
