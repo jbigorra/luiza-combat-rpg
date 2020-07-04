@@ -94,6 +94,14 @@ export function Character (type, position) {
       return false;
     }
   };
+
+  this.isValidType = function (character) {
+    if (this.type === 'melee' || this.type === 'ranged') {
+      return true; 
+    } else {
+      return false;
+    }
+  };
 }
 
 // ['leaf', 'rain', 'fog'] ----- ['rain']

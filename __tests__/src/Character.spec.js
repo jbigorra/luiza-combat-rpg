@@ -303,6 +303,17 @@ describe('Character should', () => {
    //after the attack: expect(Melee.health).toBe(950);
     expect(Melee.health).toBe(950);
   });
+
+  it('is a valid type of character', () => {
+    const character = new Character('ranged');
+    const character2 = new Character('melee');
+    const character3 = new Character('outsider');
+
+    expect(character.type).toBe('ranged');
+    expect(character3.isValidType()).toBe(false);
+    expect(character2.isValidType()).toBe(true);
+   // expect(character3.type).toBe('melee');
+  })
 });
 
 // ## Iteration Four ##
