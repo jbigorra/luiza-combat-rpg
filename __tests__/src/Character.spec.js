@@ -291,12 +291,12 @@ describe('Character should', () => {
   it('allies can heal one another', () => {
     const Ranged = new Character('ranged');
     const Melee = new Character('melee');
-    const Outsider = new Character('outsider');
+    const RangedTwo = new Character('ranged');
     Ranged.joinGuild('Leaf');
     Melee.joinGuild('Leaf');
     const value = Ranged.isAnAlly(Melee);
 
-    Outsider.attack(Melee, 100);
+    RangedTwo.attack(Melee, 100);
     Ranged.heal(Melee, 50);
 
     expect(value).toBe(true);
