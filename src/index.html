@@ -32,11 +32,12 @@
             margin-right: 1%;
           }
           .controller .controller-selection,
-          .controller .controller-actions {
+          .controller .controller-actions,
+          .controller .controller-creation {
             display: flex;
             flex-direction: row;
             justify-content: center;
-            align-items: center
+            align-items: center;
           }
         </style>
     </head>
@@ -44,6 +45,10 @@
         <div id="rpg-game" class="game-container">
           <div class="canvas"></div>
           <div class="controller">
+            <div class="controller-creation">
+              <button id="create-melee-character">Create Melee</button>
+              <button id="create-ranged-character">Create Ranged</button>
+            </div>
             <div class="controller-selection">
               <button id="select-melee-character">Select Melee</button>
               <button id="select-ranged-character">Select Ranged</button>

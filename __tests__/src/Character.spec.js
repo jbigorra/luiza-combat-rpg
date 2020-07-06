@@ -312,7 +312,7 @@ describe('Character should', () => {
 
   it('throw an error if is an invalid type of character', () => {
     expect(() => {
-      new Character('invalid_type');
+      const character = new Character('invalid_type');
     }).toThrow(CharacterErrors.INVALID_TYPE);
   });
 });

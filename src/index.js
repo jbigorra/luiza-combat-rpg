@@ -13,7 +13,7 @@ const rightButton = document.getElementById('move-right-button');
 const attackButton = document.getElementById('attack-button');
 const healButton = document.getElementById('heal-button');
 
-const myRangedCharacter = new Character('ranged', 30);
+// const myRangedCharacter = new Character('ranged', 30);
 
 /**
  * Make myRangedCharacter to be the one attacking the
@@ -21,13 +21,27 @@ const myRangedCharacter = new Character('ranged', 30);
  *
  */
 
-const rangedCharacter = new Character('ranged', 20);
-const meleeCharacter = new Character('melee', 25);
+// const rangedCharacter = new Character('ranged', 20);
+// const meleeCharacter = new Character('melee', 25);
 
+const createMeleeButton = document.getElementById('create-melee-character');
+const createRangedButton = document.getElementById('create-ranged-character');
 const meleeButton = document.getElementById('select-melee-character');
 const rangedButton = document.getElementById('select-ranged-character');
 
 let selectedCharacter = null;
+let rangedCharacter = null;
+let meleeCharacter = null;
+
+createMeleeButton.addEventListener('click', function () {
+  meleeCharacter = new Character('melee', 30);
+  console.log({ meleeCharacter: meleeCharacter.type });
+});
+
+createRangedButton.addEventListener('click', function () {
+  rangedCharacter = new Character('ranged', 50);
+  console.log({ rangedCharacter: rangedCharacter.type });
+});
 
 meleeButton.addEventListener('click', function () {
   selectedCharacter = meleeCharacter;
@@ -55,10 +69,9 @@ rightButton.addEventListener('click', function () {
 
 // why it is attacking itself xd
 attackButton.addEventListener('click', function () {
-  myRangedCharacter.attack(selectedCharacter, 100);
-  if (myRangedCharacter === selectedCharacter) return;
-  console.log(`${myRangedCharacter} is attacking`);
-  console.log(selectedCharacter);
+  rangedCharacter.attack(selectedCharacter, 100);
+  console.log(`${rangedCharacter.type} is attacking`);
+  console.log({ selectedCharacter });
 });
 
 healButton.addEventListener('click', function () {
