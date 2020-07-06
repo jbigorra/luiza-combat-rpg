@@ -1,4 +1,4 @@
-import { Character } from '../../src/core/entities/Character';
+import { Character, CharacterErrors } from '../../src/core/entities/Character';
 
 /**
  * By creating internal annonymous functions inside the Character object we can effectively
@@ -14,7 +14,7 @@ import { Character } from '../../src/core/entities/Character';
 describe('Character should', () => {
   it('be created with expected properties', () => {
     // when
-    const character = new Character();
+    const character = new Character('melee');
 
     // then/expectation
     expect(character.health).toBe(1000);
@@ -25,8 +25,8 @@ describe('Character should', () => {
 
   it('damage another character', () => {
     // given
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
     // when
 
     character1.attack(character2, 10);
@@ -39,8 +39,8 @@ describe('Character should', () => {
 
   it('die when the damage received exceeds the maximum health value', () => {
     // given
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
     // when
     character1.attack(character2, 1000);
     // damage>health
@@ -50,8 +50,8 @@ describe('Character should', () => {
   });
 
   it('not heal another character', () => {
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
     character1.attack(character2, 100);
 
     character1.heal(character2);
@@ -61,8 +61,8 @@ describe('Character should', () => {
   });
 
   it('not be healed above maximum health value', () => {
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
 
     character1.heal(character2);
 
@@ -71,8 +71,8 @@ describe('Character should', () => {
   });
 
   it('not be healed if it is not alive', () => {
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
     character1.attack(character2, 1500);
 
     character1.heal(character2);
@@ -84,7 +84,7 @@ describe('Character should', () => {
   //   A Character cannot Deal Damage to itself.
 
   it('not deal damage to itself', () => {
-    const character1 = new Character();
+    const character1 = new Character('melee');
     character1.name = 'Tito';
     const initialHealth = character1.health;
 
@@ -96,8 +96,8 @@ describe('Character should', () => {
 
   it('heals itself', () => {
     // given
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
     const initialHealth = character1.health;
 
     character2.attack(character1, 50);
@@ -113,8 +113,8 @@ describe('Character should', () => {
   // - If the target is 5 or more levels below the attacker, Damage is increased by 50%
   it('receive damage decresed by 50% if is more than 5 levels above the attacker', () => {
     // given
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
 
     character1.level = 7;
 
@@ -126,8 +126,8 @@ describe('Character should', () => {
 
   it('receive damage decresed by 50% if is 5 levels above the attacker', () => {
     // given
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
 
     character1.level = 6;
 
@@ -138,8 +138,8 @@ describe('Character should', () => {
   });
 
   it('receive damage increased by 50% if is more than 5 levels below the attacker', () => {
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
 
     character2.level = 7;
 
@@ -150,8 +150,8 @@ describe('Character should', () => {
   });
 
   it('receive damage increased by 50% if is 5 levels below the attacker', () => {
-    const character1 = new Character();
-    const character2 = new Character();
+    const character1 = new Character('melee');
+    const character2 = new Character('melee');
 
     character2.level = 6;
 
@@ -270,7 +270,6 @@ describe('Character should', () => {
 
     const value = Ranged.isAnAlly(Melee);
 
-
     expect(value).toBe(false);
   });
 
@@ -282,38 +281,40 @@ describe('Character should', () => {
     Melee.joinGuild('Rain');
 
     const value = Ranged.isAnAlly(Melee);
-    Ranged.attack(Melee, 50); 
+    Ranged.attack(Melee, 50);
 
     expect(value).toBe(true);
     expect(Melee.health).toBe(1000);
   });
 
   it('allies can heal one another', () => {
-    const Ranged = new Character('ranged');
-    const Melee = new Character('melee');
-    const RangedTwo = new Character('ranged');
-    Ranged.joinGuild('Leaf');
-    Melee.joinGuild('Leaf');
-    const value = Ranged.isAnAlly(Melee);
+    const ally1 = new Character('ranged');
+    const ally2 = new Character('melee');
+    const enemy = new Character('ranged');
+    ally1.joinGuild('Leaf');
+    ally2.joinGuild('Leaf');
+    enemy.attack(ally2, 100);
 
-    RangedTwo.attack(Melee, 100);
-    Ranged.heal(Melee, 50);
+    ally1.heal(ally2, 50);
 
-    expect(value).toBe(true);
-   //after the attack: expect(Melee.health).toBe(950);
-    expect(Melee.health).toBe(950);
+    const areAllies = ally1.isAnAlly(ally2);
+    expect(areAllies).toBe(true);
+    expect(ally2.health).toBe(950);
   });
 
   it('is a valid type of character', () => {
-    const character = new Character('ranged');
-    const character2 = new Character('melee');
-    const character3 = new Character('outsider');
+    const rangedCharacter = new Character('ranged');
+    const meleeCharacter = new Character('melee');
 
-    expect(character.type).toBe('ranged');
-    expect(character3.isValidType()).toBe(false);
-    expect(character2.isValidType()).toBe(true);
-   // expect(character3.type).toBe('melee');
-  })
+    expect(rangedCharacter.type).toBe('ranged');
+    expect(meleeCharacter.type).toBe('melee');
+  });
+
+  it('throw an error if is an invalid type of character', () => {
+    expect(() => {
+      new Character('invalid_type');
+    }).toThrow(CharacterErrors.INVALID_TYPE);
+  });
 });
 
 // ## Iteration Four ##

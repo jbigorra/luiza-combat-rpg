@@ -1,4 +1,12 @@
+export const CharacterErrors = {
+  INVALID_TYPE: 'it is an invalid type of character. Valid types are: ranged and melee'
+};
+
 export function Character (type, position) {
+  if (type !== 'melee' && type !== 'ranged') {
+    throw new Error(CharacterErrors.INVALID_TYPE);
+  }
+
   this.health = 1000;
   this.level = 1;
   this.type = type;
@@ -48,9 +56,7 @@ export function Character (type, position) {
 
   this.heal = function (targetCharacter) {
     if (!targetCharacter.isAlive()) return;
-   // if (!isEqualTo(targetCharacter)) return;
     if (!this.isAnAlly(targetCharacter) && !isEqualTo(targetCharacter)) return;
-    // if it's not an ally or it is not itself
 
     targetCharacter.health += 50;
 
@@ -90,18 +96,9 @@ export function Character (type, position) {
       const guild = _guilds[i];
       if (character.belongsToGuild(guild)) {
         return true;
-      }; 
-      return false;
-    }
-  };
-
-  this.isValidType = function (character) {
-    if (this.type === 'melee' || this.type === 'ranged') {
-      return true; 
-    } else {
+      };
       return false;
     }
   };
 }
-
 // ['leaf', 'rain', 'fog'] ----- ['rain']
