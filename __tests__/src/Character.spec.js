@@ -14,103 +14,106 @@ import { Character, CharacterErrors } from '../../src/core/entities/Character';
 function Thing (health) {
   this.health = health;
 
+  this.isAlive = function () {
+    return this.health > 0;
+  };
 }
 
 describe('Character should', () => {
   it('be created with expected properties', () => {
     // when
-    const character = new Character('melee');
+    const meleeCharacter = new Character('melee');
 
     // then/expectation
-    expect(character.health).toBe(1000);
-    expect(character.level).toBe(1);
-    expect(character.isAlive()).toBe(true);
-    expect(character.guilds().length).toBe(0);
+    expect(meleeCharacter.health).toBe(1000);
+    expect(meleeCharacter.level).toBe(1);
+    expect(meleeCharacter.isAlive()).toBe(true);
+    expect(meleeCharacter.guilds().length).toBe(0);
   });
 
   it('damage another character', () => {
     // given
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const attackingCharacter = new Character('melee');
+    const targetCharacter = new Character('melee');
     // when
 
-    character1.attack(character2, 10);
+    attackingCharacter.attack(targetCharacter, 10);
 
     // if the damage didn't exceed the character.health
     // then/expectation
-    expect(character2.health).toBe(990);
-    expect(character2.isAlive()).toBe(true);
+    expect(targetCharacter.health).toBe(990);
+    expect(targetCharacter.isAlive()).toBe(true);
   });
 
   it('die when the damage received exceeds the maximum health value', () => {
     // given
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const attackingCharacter = new Character('melee');
+    const dyingCharacter = new Character('melee');
     // when
-    character1.attack(character2, 1000);
+    attackingCharacter.attack(dyingCharacter, 1000);
     // damage>health
     // then/expectation
-    expect(character2.health).toBe(0);
-    expect(character2.isAlive()).toBe(false);
+    expect(dyingCharacter.health).toBe(0);
+    expect(dyingCharacter.isAlive()).toBe(false);
   });
 
   it('not heal another character', () => {
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
-    character1.attack(character2, 100);
+    const attackingCharacter = new Character('melee');
+    const targetCharacter = new Character('melee');
+    attackingCharacter.attack(targetCharacter, 100);
 
-    character1.heal(character2);
+    attackingCharacter.heal(targetCharacter);
 
-    expect(character2.isAlive()).toBe(true);
-    expect(character2.health).toBe(900);
+    expect(targetCharacter.isAlive()).toBe(true);
+    expect(targetCharacter.health).toBe(900);
   });
 
   it('not be healed above maximum health value', () => {
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const attackingCharacter = new Character('melee');
+    const targetCharacter = new Character('melee');
 
-    character1.heal(character2);
+    attackingCharacter.heal(targetCharacter);
 
-    expect(character2.health).toBe(1000);
-    expect(character2.isAlive()).toBe(true);
+    expect(targetCharacter.health).toBe(1000);
+    expect(targetCharacter.isAlive()).toBe(true);
   });
 
   it('not be healed if it is not alive', () => {
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
-    character1.attack(character2, 1500);
+    const attackingCharacter = new Character('melee');
+    const targetCharacter = new Character('melee');
+    attackingCharacter.attack(targetCharacter, 1500);
 
-    character1.heal(character2);
+    attackingCharacter.heal(targetCharacter);
 
-    expect(character2.health).toBe(0);
-    expect(character2.isAlive()).toBe(false);
+    expect(targetCharacter.health).toBe(0);
+    expect(targetCharacter.isAlive()).toBe(false);
   });
 
   //   A Character cannot Deal Damage to itself.
 
   it('not deal damage to itself', () => {
-    const character1 = new Character('melee');
-    character1.name = 'Tito';
-    const initialHealth = character1.health;
+    const meleeCharacter = new Character('melee');
+    meleeCharacter.name = 'Tito';
+    const initialHealth = meleeCharacter.health;
 
-    character1.attack(character1, 1500);
+    meleeCharacter.attack(meleeCharacter, 1500);
 
-    expect(character1.health).toBe(initialHealth);
-    expect(character1.isAlive()).toBe(true);
+    expect(meleeCharacter.health).toBe(initialHealth);
+    expect(meleeCharacter.isAlive()).toBe(true);
   });
 
   it('heals itself', () => {
     // given
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
-    const initialHealth = character1.health;
+    const targetCharacter = new Character('melee');
+    const attackingCharacter = new Character('melee');
+    const initialHealth = targetCharacter.health;
 
-    character2.attack(character1, 50);
+    attackingCharacter.attack(targetCharacter, 50);
 
-    character1.heal(character1);
+    targetCharacter.heal(targetCharacter);
 
-    expect(character1.health).toBe(initialHealth);
-    expect(character1.isAlive()).toBe(true);
+    expect(targetCharacter.health).toBe(initialHealth);
+    expect(targetCharacter.isAlive()).toBe(true);
   });
 
   // 1. When dealing damage:
@@ -118,178 +121,178 @@ describe('Character should', () => {
   // - If the target is 5 or more levels below the attacker, Damage is increased by 50%
   it('receive damage decresed by 50% if is more than 5 levels above the attacker', () => {
     // given
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const targetCharacter = new Character('melee');
+    const attackingCharacter = new Character('melee');
 
-    character1.level = 7;
+    targetCharacter.level = 7;
 
     // when the character is 5 or more levels above the attacker
-    character2.attack(character1, 50);
+    attackingCharacter.attack(targetCharacter, 50);
 
-    expect(character1.health).toBe(975);
+    expect(targetCharacter.health).toBe(975);
   });
 
   it('receive damage decresed by 50% if is 5 levels above the attacker', () => {
     // given
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const targetCharacter = new Character('melee');
+    const attackingCharacter = new Character('melee');
 
-    character1.level = 6;
+    targetCharacter.level = 6;
 
     // when the character is 5 or more levels above the attacker
-    character2.attack(character1, 50);
+    attackingCharacter.attack(targetCharacter, 50);
 
-    expect(character1.health).toBe(975);
+    expect(targetCharacter.health).toBe(975);
   });
 
   it('receive damage increased by 50% if is more than 5 levels below the attacker', () => {
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const targetCharacter = new Character('melee');
+    const attackingCharacter = new Character('melee');
 
-    character2.level = 7;
+    attackingCharacter.level = 7;
 
     // when the character is 5 or more levels above the attacker
-    character2.attack(character1, 50);
+    attackingCharacter.attack(targetCharacter, 50);
 
-    expect(character1.health).toBe(925);
+    expect(targetCharacter.health).toBe(925);
   });
 
   it('receive damage increased by 50% if is 5 levels below the attacker', () => {
-    const character1 = new Character('melee');
-    const character2 = new Character('melee');
+    const targetCharacter = new Character('melee');
+    const attackingCharacter = new Character('melee');
 
-    character2.level = 6;
+    attackingCharacter.level = 6;
 
     // when the character is 5 or more levels above the attacker
-    character2.attack(character1, 50);
+    attackingCharacter.attack(targetCharacter, 50);
 
-    expect(character1.health).toBe(925);
+    expect(targetCharacter.health).toBe(925);
   });
 
   it('have a Max Range set to 2 if character is melee', () => {
     // given/when
-    const Melee = new Character('melee');
+    const meleeCharacter = new Character('melee');
 
-    expect(Melee.MAX_RANGE()).toBe(2);
+    expect(meleeCharacter.MAX_RANGE()).toBe(2);
   });
 
-  it('have a Max Range set to 20 if character is Ranged', () => {
+  it('have a Max Range set to 20 if character is rangedCharacter', () => {
     // given/when
-    const Ranged = new Character('ranged');
+    const rangedCharacter = new Character('ranged');
 
-    expect(Ranged.MAX_RANGE()).toBe(20);
+    expect(rangedCharacter.MAX_RANGE()).toBe(20);
   });
 
   it('(melee) not attack if it is out of range from the target', () => {
     // given/when
-    const Melee = new Character('melee', 26);
-    const Ranged = new Character('ranged', 3);
-    const initialHealth = Ranged.health;
+    const meleeCharacter = new Character('melee', 26);
+    const rangedCharacter = new Character('ranged', 3);
+    const initialHealth = rangedCharacter.health;
 
-    Melee.attack(Ranged, 50);
+    meleeCharacter.attack(rangedCharacter, 50);
 
-    expect(Ranged.health).toBe(initialHealth);
+    expect(rangedCharacter.health).toBe(initialHealth);
   });
 
   it('(melee) attack if it is in range from the target', () => {
     // given/when
-    const Melee = new Character('melee', 1);
-    const Ranged = new Character('ranged', 3);
+    const meleeCharacter = new Character('melee', 1);
+    const rangedCharacter = new Character('ranged', 3);
 
-    Melee.attack(Ranged, 50);
+    meleeCharacter.attack(rangedCharacter, 50);
 
-    expect(Ranged.health).toBe(950);
+    expect(rangedCharacter.health).toBe(950);
   });
 
   it('(ranged) not attack if it is out of range from the target', () => {
-    const Ranged = new Character('ranged', 4);
-    const Melee = new Character('melee', 30);
-    const initialHealth = Melee.health;
+    const rangedCharacter = new Character('ranged', 4);
+    const meleeCharacter = new Character('melee', 30);
+    const initialHealth = meleeCharacter.health;
 
-    Ranged.attack(Melee, 50);
+    rangedCharacter.attack(meleeCharacter, 50);
 
-    expect(Melee.health).toBe(initialHealth);
+    expect(meleeCharacter.health).toBe(initialHealth);
   });
 
   it('(ranged) attack if it is in range from the target', () => {
-    const Ranged = new Character('ranged', 4);
-    const Melee = new Character('melee', 20);
+    const rangedCharacter = new Character('ranged', 4);
+    const meleeCharacter = new Character('melee', 20);
 
-    Ranged.attack(Melee, 50);
+    rangedCharacter.attack(meleeCharacter, 50);
 
-    expect(Melee.health).toBe(950);
+    expect(meleeCharacter.health).toBe(950);
   });
 
   it('join one guild', () => {
-    const Ranged = new Character('ranged');
+    const rangedCharacter = new Character('ranged');
     // const faction = ['Leaf', 'rain', 'cloud'];
     // when character is joining
-    Ranged.joinGuild('Leaf');
+    rangedCharacter.joinGuild('Leaf');
 
-    expect(Ranged.belongsToGuild('Leaf')).toBe(true);
+    expect(rangedCharacter.belongsToGuild('Leaf')).toBe(true);
   });
 
   it('join two guilds', () => {
-    const Ranged = new Character('ranged');
+    const rangedCharacter = new Character('ranged');
 
-    Ranged.joinGuild('Leaf');
-    Ranged.joinGuild('Rain');
+    rangedCharacter.joinGuild('Leaf');
+    rangedCharacter.joinGuild('Rain');
 
-    expect(Ranged.belongsToGuild('Leaf')).toBe(true);
-    expect(Ranged.belongsToGuild('Rain')).toBe(true);
+    expect(rangedCharacter.belongsToGuild('Leaf')).toBe(true);
+    expect(rangedCharacter.belongsToGuild('Rain')).toBe(true);
   });
 
   it('leave one guild', () => {
-    const Ranged = new Character('ranged');
-    Ranged.joinGuild('Leaf');
-    Ranged.joinGuild('Rain');
+    const rangedCharacter = new Character('ranged');
+    rangedCharacter.joinGuild('Leaf');
+    rangedCharacter.joinGuild('Rain');
 
-    Ranged.leaveGuild('Leaf');
+    rangedCharacter.leaveGuild('Leaf');
 
-    expect(Ranged.belongsToGuild('Leaf')).toBe(false);
-    expect(Ranged.guilds().length).toBe(1);
+    expect(rangedCharacter.belongsToGuild('Leaf')).toBe(false);
+    expect(rangedCharacter.guilds().length).toBe(1);
   });
 
   it('characters belonging to the same guild are allies', () => {
-    const Ranged = new Character('ranged');
-    const Melee = new Character('melee');
-    Ranged.joinGuild('Leaf');
-    Ranged.joinGuild('Rain');
-    Ranged.joinGuild('Fog');
+    const rangedCharacter = new Character('ranged');
+    const meleeCharacter = new Character('melee');
+    rangedCharacter.joinGuild('Leaf');
+    rangedCharacter.joinGuild('Rain');
+    rangedCharacter.joinGuild('Fog');
 
-    Melee.joinGuild('Leaf');
+    meleeCharacter.joinGuild('Leaf');
 
-    const value = Ranged.isAnAlly(Melee);
+    const value = rangedCharacter.isAnAlly(meleeCharacter);
 
     expect(value).toBe(true);
   });
 
   it('characters dont belong to the same guild', () => {
-    const Ranged = new Character('ranged');
-    const Melee = new Character('melee');
-    Ranged.joinGuild('Leaf');
-    Ranged.joinGuild('Mist');
-    Ranged.joinGuild('Sand');
+    const rangedCharacter = new Character('ranged');
+    const meleeCharacter = new Character('melee');
+    rangedCharacter.joinGuild('Leaf');
+    rangedCharacter.joinGuild('Mist');
+    rangedCharacter.joinGuild('Sand');
 
-    Melee.joinGuild('Rain');
+    meleeCharacter.joinGuild('Rain');
 
-    const value = Ranged.isAnAlly(Melee);
+    const value = rangedCharacter.isAnAlly(meleeCharacter);
 
     expect(value).toBe(false);
   });
 
   it('allies cannot deal damage to each other', () => {
-    const Ranged = new Character('ranged');
-    const Melee = new Character('melee');
-    Ranged.joinGuild('Leaf');
-    Melee.joinGuild('Leaf');
-    Melee.joinGuild('Rain');
+    const rangedCharacter = new Character('ranged');
+    const meleeCharacter = new Character('melee');
+    rangedCharacter.joinGuild('Leaf');
+    meleeCharacter.joinGuild('Leaf');
+    meleeCharacter.joinGuild('Rain');
 
-    const value = Ranged.isAnAlly(Melee);
-    Ranged.attack(Melee, 50);
+    const value = rangedCharacter.isAnAlly(meleeCharacter);
+    rangedCharacter.attack(meleeCharacter, 50);
 
     expect(value).toBe(true);
-    expect(Melee.health).toBe(1000);
+    expect(meleeCharacter.health).toBe(1000);
   });
 
   it('allies can heal one another', () => {
@@ -330,6 +333,16 @@ describe('Character should', () => {
       const rangedCharacter = new Character('ranged');
       const TreeThing = new Thing(2000);
       rangedCharacter.attack(TreeThing, 500);
+
+      expect(TreeThing.health).toBe(1500);
+    });
+
+    it('things cannot be Healed', () => {
+      const enemy = new Character('ranged');
+      const TreeThing = new Thing(2000);
+      enemy.attack(TreeThing, 500);
+      enemy.heal(TreeThing, 100);
+      console.log(TreeThing.health);
 
       expect(TreeThing.health).toBe(1500);
     });
