@@ -11,6 +11,11 @@ import { Character, CharacterErrors } from '../../src/core/entities/Character';
 //   ranged: 'ranged'
 // };
 
+function Thing (health) {
+  this.health = health;
+
+}
+
 describe('Character should', () => {
   it('be created with expected properties', () => {
     // when
@@ -315,15 +320,20 @@ describe('Character should', () => {
       const character = new Character('invalid_type');
     }).toThrow(CharacterErrors.INVALID_TYPE);
   });
+
+  it('things have health', () => {
+    const TreeThing = new Thing(2000)
+
+
+    expect(TreeThing.health).toBe(2000);
+  });
+// ## Iteration Five ##
+
+// 1. Characters can damage non-character *things* (props).
+//     - Anything that has Health may be a target
+//     - These things cannot be Healed and they do not Deal Damage
+//     - These things do not belong to Factions; they are neutral
+//     - When reduced to 0 Health, things are *Destroyed*
+//     - As an example, you may create a Tree with 2000 Health
+
 });
-
-// ## Iteration Four ##
-
-// 1. Characters may belong to one or more guilds.
-//     - Newly created Characters belong to no guild. done
-//     - A Character may Join or Leave one or more guilds. half way
-
-// 2. Players belonging to the same guild are considered Allies.
-//    - Check characters are NOT allies
-//    - Allies cannot Deal Damage to one another.
-//    - Allies can Heal one another.
