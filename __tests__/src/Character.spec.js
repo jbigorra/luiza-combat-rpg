@@ -323,10 +323,16 @@ describe('Character should', () => {
 
   it('things have health', () => {
     const TreeThing = new Thing(2000)
-
-
     expect(TreeThing.health).toBe(2000);
   });
+
+    it('characters can damage things', () => {
+      const rangedCharacter = new Character('ranged');
+      const TreeThing = new Thing(2000);
+      rangedCharacter.attack(TreeThing, 500);
+
+      expect(TreeThing.health).toBe(1500);
+    });
 // ## Iteration Five ##
 
 // 1. Characters can damage non-character *things* (props).
