@@ -54,14 +54,14 @@ export function Character (type, position) {
     }
   };
 
-  this.heal = function (targetCharacter) {
-    if (!targetCharacter.isAlive()) return;
-    if (!this.isAnAlly(targetCharacter) && !isEqualTo(targetCharacter)) return;
+  this.heal = function (target) {
+    if (!target.isAlive()) return;
+    if (!this.isAnAlly(target) && !isEqualTo(target)) return;
 
-    targetCharacter.health += 50;
+    target.health += 50;
 
-    if (targetCharacter.health > 1000) {
-      targetCharacter.health = 1000;
+    if (target.health > 1000) {
+      target.health = 1000;
     }
   };
 
@@ -91,10 +91,10 @@ export function Character (type, position) {
     return _guilds.splice(guildIndex, 1);
   };
 
-  this.isAnAlly = function (character) {
+  this.isAnAlly = function (target) {
     for (let i = 0; i < _guilds.length; i++) {
       const guild = _guilds[i];
-      if (character.belongsToGuild(guild)) {
+      if (target.belongsToGuild(guild)) {
         return true;
       };
       return false;
@@ -102,3 +102,6 @@ export function Character (type, position) {
   };
 }
 // ['leaf', 'rain', 'fog'] ----- ['rain']
+
+// const thing = Object.create(Character);
+// console.log(thing.health);

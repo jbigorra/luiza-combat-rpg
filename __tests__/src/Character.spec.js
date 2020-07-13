@@ -1,4 +1,5 @@
 import { Character, CharacterErrors } from '../../src/core/entities/Character';
+import { Thing } from '../../src/core/entities/Thing';
 
 /**
  * By creating internal annonymous functions inside the Character object we can effectively
@@ -10,14 +11,6 @@ import { Character, CharacterErrors } from '../../src/core/entities/Character';
 //   melee: 'melee',
 //   ranged: 'ranged'
 // };
-
-function Thing (health) {
-  this.health = health;
-
-  this.isAlive = function () {
-    return this.health > 0;
-  };
-}
 
 describe('Character should', () => {
   it('be created with expected properties', () => {
@@ -323,36 +316,4 @@ describe('Character should', () => {
       const character = new Character('invalid_type');
     }).toThrow(CharacterErrors.INVALID_TYPE);
   });
-
-  it('things have health', () => {
-    const TreeThing = new Thing(2000)
-    expect(TreeThing.health).toBe(2000);
-  });
-
-    it('characters can damage things', () => {
-      const rangedCharacter = new Character('ranged');
-      const TreeThing = new Thing(2000);
-      rangedCharacter.attack(TreeThing, 500);
-
-      expect(TreeThing.health).toBe(1500);
-    });
-
-    it('things cannot be Healed', () => {
-      const enemy = new Character('ranged');
-      const TreeThing = new Thing(2000);
-      enemy.attack(TreeThing, 500);
-      enemy.heal(TreeThing, 100);
-      console.log(TreeThing.health);
-
-      expect(TreeThing.health).toBe(1500);
-    });
-// ## Iteration Five ##
-
-// 1. Characters can damage non-character *things* (props).
-//     - Anything that has Health may be a target
-//     - These things cannot be Healed and they do not Deal Damage
-//     - These things do not belong to Factions; they are neutral
-//     - When reduced to 0 Health, things are *Destroyed*
-//     - As an example, you may create a Tree with 2000 Health
-
 });

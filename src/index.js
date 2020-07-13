@@ -32,11 +32,51 @@ const rangedButton = document.getElementById('select-ranged-character');
 let selectedCharacter = null;
 let rangedCharacter = null;
 let meleeCharacter = null;
+const database = {
+  characters: {},
+  addCharacter: function (id, character) {
+    this.characters[id] = character;
+  }
+};
 
 createMeleeButton.addEventListener('click', function () {
   meleeCharacter = new Character('melee', 30);
+  const id = '1';
+  database.addCharacter(id, meleeCharacter);
+  spawnCharacter(id, meleeCharacter.type);
   console.log({ meleeCharacter: meleeCharacter.type });
 });
+
+// homework is:
+/**
+ * 1- Research about coding best practices as well as coding smells. (javascript)
+ * 2- Most common steps to refactor or in other words refactoring best practices (javascript)
+ * 3- Try refactoring the spawnCharacter function.
+ * 4- Try to create the ranged character with red color and must be positioned on the right side.
+ *   - Try first to create it in the index.html and also add the proper styles to it.
+ *   - Then try use the spawnCharacter function to create the ranged character.
+ */
+
+function spawnCharacter (id, characterType) {
+  const canvas = document.getElementById('canvas');
+
+  const characterContainer = document.createElement('div');
+  characterContainer.id = id;
+  characterContainer.classList.add('character', characterType);
+
+  const head = document.createElement('div');
+  head.id = 'character-head-' + id;
+  head.classList.add('head');
+
+  const body = document.createElement('div');
+  body.id = 'character-body-' + id;
+  body.classList.add('body');
+
+  characterContainer.appendChild(head);
+  characterContainer.appendChild(body);
+
+  canvas.appendChild(characterContainer);
+}
 
 createRangedButton.addEventListener('click', function () {
   rangedCharacter = new Character('ranged', 50);
@@ -61,13 +101,6 @@ rightButton.addEventListener('click', function () {
   console.log('moving right');
 });
 
-// attackButton.addEventListener('click', function () {
-//   rangedCharacter.attack(meleeCharacter, 50);
-//   console.log('attacking');
-//   console.log(meleeCharacter);
-// });
-
-// why it is attacking itself xd
 attackButton.addEventListener('click', function () {
   rangedCharacter.attack(selectedCharacter, 100);
   console.log(`${rangedCharacter.type} is attacking`);
