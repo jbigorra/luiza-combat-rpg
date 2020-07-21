@@ -8,6 +8,32 @@ import { Character } from './core/entities/Character';
 // var mountNode = document.getElementById('app');
 // ReactDOM.render(<App name="Jane" />, mountNode);
 
+/**
+ * - Introduce the ability to click on a character to select it.
+ *   - If the player clicks the left button then the player selects the character that wants to use.
+ *     - Highlight the character with a green shadow.
+ *   - If the player clicks the middle button of the mouse it will select the target that it wants to interact with.
+ *     - Highlight the character with a red shadow.
+ *
+ * - Have one class that will be incharge of bootstraping and starting the game. (Should be tested)
+ *   - This class should be a mediator.
+ *     - (Very common pattern used in a lot of apps and servers => MVP = Model View Presenter)
+ *       - View in charge of rendering and updating the UI.
+ *       - Presenter (mediator)
+ *       - Core/Domain
+ *
+ *   - The game starts with 2 characters by default
+ *     - One Melee
+ *     - One Ranged
+ *
+ *  New features:
+ * - Lets introduce a health bar on top of each character.  (Consider using a react component)
+ *   - They start with initial health of the character
+ *   - They reflect always the current health of the character.
+ *     - when character gets attacked the health bar should lower the HP.
+ *     - when character gets healed the health bar should increase the HP.
+ */
+
 const leftButton = document.getElementById('move-left-button');
 const rightButton = document.getElementById('move-right-button');
 const attackButton = document.getElementById('attack-button');
@@ -45,12 +71,6 @@ createRangedButton.addEventListener('click', function () {
 /**
  * 1- Research about coding best practices as well as coding smells. (javascript)
  * 2- Most common steps to refactor or in other words refactoring best practices (javascript)
- * 3- Try refactoring the spawnCharacter function.
- * 4- Try to create the ranged character with red color and must be positioned on the right side.
- *   - Try first to create it in the index.html and also add the proper styles to it.
- *   - Then try use the spawnCharacter function to create the ranged character.
- *
- *
  */
 
 function createContainer (id = '', classList = []) {
