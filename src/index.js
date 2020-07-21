@@ -12,24 +12,10 @@ const leftButton = document.getElementById('move-left-button');
 const rightButton = document.getElementById('move-right-button');
 const attackButton = document.getElementById('attack-button');
 const healButton = document.getElementById('heal-button');
-
-// const myRangedCharacter = new Character('ranged', 30);
-
-/**
- * Make myRangedCharacter to be the one attacking the
- * selectedCharacter.
- *
- */
-
-// const rangedCharacter = new Character('ranged', 20);
-// const meleeCharacter = new Character('melee', 25);
-
 const createMeleeButton = document.getElementById('create-melee-character');
 const createRangedButton = document.getElementById('create-ranged-character');
-const meleeButton = document.getElementById('select-melee-character');
-const rangedButton = document.getElementById('select-ranged-character');
 
-let selectedCharacter = null;
+const selectedCharacter = null;
 let rangedCharacter = null;
 let meleeCharacter = null;
 const database = {
@@ -91,16 +77,6 @@ function spawnCharacter (id, characterType) {
 createRangedButton.addEventListener('click', function () {
   rangedCharacter = new Character('ranged', 50);
   console.log({ rangedCharacter: rangedCharacter.type });
-});
-
-meleeButton.addEventListener('click', function () {
-  selectedCharacter = meleeCharacter;
-  console.log({ selectedCharacter: selectedCharacter.type });
-});
-
-rangedButton.addEventListener('click', function () {
-  selectedCharacter = rangedCharacter;
-  console.log({ selectedCharacter: selectedCharacter.type });
 });
 
 leftButton.addEventListener('click', function () {
