@@ -47,6 +47,14 @@ createMeleeButton.addEventListener('click', function () {
   console.log({ meleeCharacter: meleeCharacter.type });
 });
 
+createRangedButton.addEventListener('click', function () {
+  rangedCharacter = new Character('ranged', 10);
+  const id = '2';
+  database.addCharacter(id, rangedCharacter);
+  spawnCharacter(id, rangedCharacter.type);
+  console.log({ rangedCharacter: rangedCharacter.type });
+});
+
 // homework is:
 /**
  * 1- Research about coding best practices as well as coding smells. (javascript)
@@ -55,7 +63,10 @@ createMeleeButton.addEventListener('click', function () {
  * 4- Try to create the ranged character with red color and must be positioned on the right side.
  *   - Try first to create it in the index.html and also add the proper styles to it.
  *   - Then try use the spawnCharacter function to create the ranged character.
+ *
+ *
  */
+
 function createContainer (id = '', classList = []) {
   const container = document.createElement('div');
   container.id = id;
