@@ -56,21 +56,20 @@ createMeleeButton.addEventListener('click', function () {
  *   - Try first to create it in the index.html and also add the proper styles to it.
  *   - Then try use the spawnCharacter function to create the ranged character.
  */
+function createContainer (id = '', classList = []) {
+  const container = document.createElement('div');
+  container.id = id;
+  container.classList.add(...classList);
 
+  return container;
+}
+// Stay DRY (don't repeat yourself (more than 2 times) )
 function spawnCharacter (id, characterType) {
   const canvas = document.getElementById('canvas');
 
-  const characterContainer = document.createElement('div');
-  characterContainer.id = id;
-  characterContainer.classList.add('character', characterType);
-
-  const head = document.createElement('div');
-  head.id = 'character-head-' + id;
-  head.classList.add('head');
-
-  const body = document.createElement('div');
-  body.id = 'character-body-' + id;
-  body.classList.add('body');
+  const characterContainer = createContainer(id, ['character', characterType]);
+  const head = createContainer('character-head-' + id, ['head']);
+  const body = createContainer('character-body-' + id, ['body']);
 
   characterContainer.appendChild(head);
   characterContainer.appendChild(body);
