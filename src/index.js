@@ -34,16 +34,10 @@ import { Character } from './core/entities/Character';
  *     - when character gets healed the health bar should increase the HP.
  */
 
-const leftButton = document.getElementById('move-left-button');
-const rightButton = document.getElementById('move-right-button');
-const attackButton = document.getElementById('attack-button');
-const healButton = document.getElementById('heal-button');
-const createMeleeButton = document.getElementById('create-melee-character');
-const createRangedButton = document.getElementById('create-ranged-character');
-
 const selectedCharacter = null;
-let rangedCharacter = null;
-let meleeCharacter = null;
+const rangedCharacter = null;
+const meleeCharacter = null;
+
 const database = {
   characters: {},
   addCharacter: function (id, character) {
@@ -51,21 +45,7 @@ const database = {
   }
 };
 
-createMeleeButton.addEventListener('click', function () {
-  meleeCharacter = new Character('melee', 30);
-  const id = '1';
-  database.addCharacter(id, meleeCharacter);
-  spawnCharacter(id, meleeCharacter.type);
-  console.log({ meleeCharacter: meleeCharacter.type });
-});
-
-createRangedButton.addEventListener('click', function () {
-  rangedCharacter = new Character('ranged', 10);
-  const id = '2';
-  database.addCharacter(id, rangedCharacter);
-  spawnCharacter(id, rangedCharacter.type);
-  console.log({ rangedCharacter: rangedCharacter.type });
-});
+// /
 
 // homework is:
 /**
@@ -73,48 +53,99 @@ createRangedButton.addEventListener('click', function () {
  * 2- Most common steps to refactor or in other words refactoring best practices (javascript)
  */
 
-function createContainer (id = '', classList = []) {
-  const container = document.createElement('div');
-  container.id = id;
-  container.classList.add(...classList);
+class GamePad {
+  constructor () {
+    this.leftButton = document.getElementById('move-left-button');
+    this.rightButton = document.getElementById('move-right-button');
+    this.attackButton = document.getElementById('attack-button');
+    this.healButton = document.getElementById('heal-button');
+  }
 
-  return container;
+  start () {
+    this.leftButton.addEventListener('click', function () {
+      console.log('moving left');
+    });
+
+    this.rightButton.addEventListener('click', function () {
+      console.log('moving right');
+    });
+
+    this.attackButton.addEventListener('click', function () {
+      rangedCharacter.attack(selectedCharacter, 100);
+      console.log(`${rangedCharacter.type} is attacking`);
+      console.log({ selectedCharacter });
+    });
+
+    this.healButton.addEventListener('click', function () {
+      console.log('healing');
+      meleeCharacter.heal(meleeCharacter);
+      console.log(meleeCharacter);
+    });
+  }
 }
-// Stay DRY (don't repeat yourself (more than 2 times) )
-function spawnCharacter (id, characterType) {
-  const canvas = document.getElementById('canvas');
+class CreationController {
+  constructor () {
+    this.startGame = document.getElementById('start-game');
+  }
 
-  const characterContainer = createContainer(id, ['character', characterType]);
-  const head = createContainer('character-head-' + id, ['head']);
-  const body = createContainer('character-body-' + id, ['body']);
+  start () {
+    this.startGame.addEventListener('click', () => {
+      this.createCharacter('1', 'melee', 30);
+      this.createCharacter('2', 'ranged', 50);
+    });
+  }
 
-  characterContainer.appendChild(head);
-  characterContainer.appendChild(body);
+  createCharacter (id, type, position) {
+    const character = new Character(type, position);
+    database.addCharacter(id, character);
+    this.spawnCharacter(id, character.type);
+    console.log({ character: character.type });
+  }
 
-  canvas.appendChild(characterContainer);
+  spawnCharacter (id, characterType) {
+    const canvas = document.getElementById('canvas');
+
+    const characterContainer = this.createContainer(id, ['character', characterType]);
+    const head = this.createContainer('character-head-' + id, ['head']);
+    const body = this.createContainer('character-body-' + id, ['body']);
+
+    characterContainer.appendChild(head);
+    characterContainer.appendChild(body);
+
+    canvas.appendChild(characterContainer);
+  }
+
+  createContainer (id = '', classList = []) {
+    const container = document.createElement('div');
+    container.id = id;
+    container.classList.add(...classList);
+
+    return container;
+  }
 }
 
-createRangedButton.addEventListener('click', function () {
-  rangedCharacter = new Character('ranged', 50);
-  console.log({ rangedCharacter: rangedCharacter.type });
-});
+class Game {
+  constructor (gamepad, creationController) {
+    this.gamepad = gamepad;
+    this.creationController = creationController;
+  }
 
-leftButton.addEventListener('click', function () {
-  console.log('moving left');
-});
+  run () {
+    this.gamepad.start();
+    this.creationController.start();
+  }
+}
 
-rightButton.addEventListener('click', function () {
-  console.log('moving right');
-});
+const gamepad = new GamePad();
+const creationController = new CreationController();
+const game = new Game(gamepad, creationController);
 
-attackButton.addEventListener('click', function () {
-  rangedCharacter.attack(selectedCharacter, 100);
-  console.log(`${rangedCharacter.type} is attacking`);
-  console.log({ selectedCharacter });
-});
+game.run();
 
-healButton.addEventListener('click', function () {
-  console.log('healing');
-  meleeCharacter.heal(meleeCharacter);
-  console.log(meleeCharacter);
-});
+/**
+ *
+ *
+ *
+ *
+ *
+ */
