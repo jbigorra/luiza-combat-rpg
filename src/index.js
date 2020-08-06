@@ -38,13 +38,6 @@ const selectedCharacter = null;
 const rangedCharacter = null;
 const meleeCharacter = null;
 
-const database = {
-  characters: {},
-  addCharacter: function (id, character) {
-    this.characters[id] = character;
-  }
-};
-
 // /
 
 // homework is:
@@ -84,22 +77,33 @@ class GamePad {
   }
 }
 class CreationController {
-  constructor () {
-    this.startGame = document.getElementById('start-game');
+  constructor (database) {
+    this.db = database;
+    this.selectCharacter = this.selectCharacter.bind(this);
   }
 
-  start () {
-    this.startGame.addEventListener('click', () => {
-      this.createCharacter('1', 'melee', 30);
-      this.createCharacter('2', 'ranged', 50);
-    });
+  createInitialCharacters () {
+    // First character
+    const character1 = this.createCharacter('1', 'melee', 30);
+    this.db.addCharacter(character1.characterEl.id, character1);
+
+    // Second character
+    const character2 = this.createCharacter('2', 'ranged', 50);
+    this.db.addCharacter(character2.characterEl.id, character2);
+
+    character1.characterEl.addEventListener('click', this.selectCharacter);
+    character2.characterEl.addEventListener('click', this.selectCharacter);
   }
 
   createCharacter (id, type, position) {
     const character = new Character(type, position);
     database.addCharacter(id, character);
-    this.spawnCharacter(id, character.type);
     console.log({ character: character.type });
+
+    return {
+      characterEntity: character,
+      characterEl: this.spawnCharacter(id, character.type)
+    };
   }
 
   spawnCharacter (id, characterType) {
@@ -113,6 +117,8 @@ class CreationController {
     characterContainer.appendChild(body);
 
     canvas.appendChild(characterContainer);
+
+    return characterContainer;
   }
 
   createContainer (id = '', classList = []) {
@@ -122,23 +128,51 @@ class CreationController {
 
     return container;
   }
+
+  selectCharacter (e) {
+    const character = e.currentTarget;
+    character.classList.add('selected-character');
+    this.db.updateSelectedCharacterById(character.id);
+
+    const target = this.db.characters[character.id === '1' ? '2' : '1'];
+    target.characterEl.classList.add('selected-target');
+    this.db.updateSelectedTargetById(target.characterEl.id);
+  }
 }
 
 class Game {
-  constructor (gamepad, creationController) {
+  constructor (gamepad, creationController, database) {
+    this.db = database;
     this.gamepad = gamepad;
     this.creationController = creationController;
   }
 
   run () {
     this.gamepad.start();
-    this.creationController.start();
+    this.creationController.createInitialCharacters();
   }
 }
 
+const database = {
+  selectedCharacter: null,
+  selectedTarget: null,
+  characters: {},
+  addCharacter: function (id, character) {
+    this.characters[id] = character;
+  },
+  updateSelectedCharacterById: function (id) {
+    this.selectedCharacter = this.characters[id];
+    console.log({ selectedCharacter: this.selectedCharacter });
+  },
+  updateSelectedTargetById: function (id) {
+    this.selectedTarget = this.characters[id];
+    console.log({ selectedTarget: this.selectedTarget });
+  }
+};
+
 const gamepad = new GamePad();
-const creationController = new CreationController();
-const game = new Game(gamepad, creationController);
+const creationController = new CreationController(database);
+const game = new Game(gamepad, creationController, database);
 
 game.run();
 
