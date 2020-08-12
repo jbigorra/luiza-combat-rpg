@@ -4,6 +4,9 @@
 // import './styles.css';
 
 import { Character } from './core/entities/Character';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import HealthBar from './react-components/HealthBar';
 
 // var mountNode = document.getElementById('app');
 // ReactDOM.render(<App name="Jane" />, mountNode);
@@ -14,13 +17,6 @@ import { Character } from './core/entities/Character';
  *     - Highlight the character with a green shadow.
  *   - If the player clicks the middle button of the mouse it will select the target that it wants to interact with.
  *     - Highlight the character with a red shadow.
- *
- * - Have one class that will be incharge of bootstraping and starting the game. (Should be tested)
- *   - This class should be a mediator.
- *     - (Very common pattern used in a lot of apps and servers => MVP = Model View Presenter)
- *       - View in charge of rendering and updating the UI.
- *       - Presenter (mediator)
- *       - Core/Domain
  *
  *   - The game starts with 2 characters by default
  *     - One Melee
@@ -112,6 +108,11 @@ class CreationController {
     const characterContainer = this.createContainer(id, ['character', characterType]);
     const head = this.createContainer('character-head-' + id, ['head']);
     const body = this.createContainer('character-body-' + id, ['body']);
+    const healthBar = this.createContainer('character-health-bar-' + id, ['health-bar']);
+    const healthFiller = this.createContainer('character-health-filler-' + id, ['health-filler']);
+    healthBar.appendChild(healthFiller);
+
+    characterContainer.appendChild(healthBar);
 
     characterContainer.appendChild(head);
     characterContainer.appendChild(body);
@@ -175,34 +176,3 @@ const creationController = new CreationController(database);
 const game = new Game(gamepad, creationController, database);
 
 game.run();
-
-/**
- *
- *
- *
- *
- *
- */
-
-  let display = document.getElementsById('display').getContext('2d');
-
- 
-  
- function drawHealthbar(canvas, x, y, width, height, health, max_health) {
-   if(health >= max_health) {health = max_health;}
-   if(health <= 0) {health = 0;}
-   canvas.fillStyle = '#000000';
-   canvas.fillRect(x, y, width, height);
-   let colorNumber = Math.round(1-(health/max_health)*0xff)*0x10000 + Math.round((health/max_health)*0xff)*0x100;
-   let colorString = colorNumber.toString(16);
-   if (colorNumber >= 0x100000) {
-     canvas.fillStyle = '#' + colorString;
-   } else if (colorNumber << 0x100000 && colorNumber >= 0x10000) {
-    canvas.fillStyle = '#0' + colorString;
-   } else if (colorNumber << 0x10000) {
-    canvas.fillStyle = '#00' + colorString;
-   }
-   canvas.fillRect(x+1, y+1, (health/max_health)*(width-2), height-2);
- }
-
- drawHealthbar(display, 10, 10, 300, 50, 100, 100);

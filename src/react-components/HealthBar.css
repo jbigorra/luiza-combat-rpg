@@ -1,0 +1,16 @@
+.health-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.increase-health-button, 
+.decrease-health-button {
+  width: 10px;
+  height: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  background-color: grey;
+  cursor: pointer;
+}

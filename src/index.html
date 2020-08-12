@@ -4,6 +4,9 @@
         <title>RPG COMBAT GAME</title>
         <meta charset="utf-8">
         <style>
+          * {
+            box-sizing: border-box;
+          }
           .game-container {
             position: absolute;
             top: 2%;
@@ -63,6 +66,16 @@
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
           }
+          .character .health-bar {
+            border: 1px solid black;
+            margin-bottom: 5px;
+            width: 100%;
+          }
+          .character .health-bar .health-filler {
+            background-color: green;
+            height: 5px;
+            width: 100%;
+          }
           .melee.character {
             left: 0;
           }
@@ -86,7 +99,6 @@
     <body>
         <div id="rpg-game" class="game-container">
           <div id="canvas" class="canvas"></div>
-          <canvas id="display" width="640" height="200"></canvas>
           <div class="controller">
             <div class="controller-actions">
               <button id="move-left-button">LEFT</button>
